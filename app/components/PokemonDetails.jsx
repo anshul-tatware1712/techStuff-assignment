@@ -1,14 +1,14 @@
-'use client';
-
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { fetchPokemonDetails, fetchTypeDetails } from '../lib/api';
+import Loading from './Loading';
+import ErrorDisplay from './ErrorDisplay';
 
 
 export default function PokemonDetails({ pokemonName }) {
   const [activeTab, setActiveTab] = useState(0);
 
-  const { data: pokemon, isLoading: isPokemonLoading } = useQuery({
+  const { data: pokemon, isLoading: isPokemonLoading, error: pokemonError } = useQuery({
     queryKey: ['pokemon', pokemonName],
     queryFn: () => fetchPokemonDetails(pokemonName),
     enabled: !!pokemonName,
@@ -23,7 +23,8 @@ export default function PokemonDetails({ pokemonName }) {
   });
 
   if (!pokemonName) return <div className="p-4 text-gray-500">Select a Pokemon to view details</div>;
-  if (isPokemonLoading) return <div className="p-4">Loading details...</div>;
+  if (isPokemonLoading) return <Loading />;
+  if (pokemonError) return <ErrorDisplay message={pokemonError.message} />;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200 max-w-[400px]">

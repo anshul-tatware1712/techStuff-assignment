@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { fetchPokemonList } from '../lib/api';
 import PokemonDetails from './PokemonDetails';
+import Loading from './Loading';
+import ErrorDisplay from './ErrorDisplay';
 
 
 export default function PokemonTable() {
@@ -17,8 +19,8 @@ export default function PokemonTable() {
     keepPreviousData: true,
   });
 
-  if (isLoading) return <div className="text-center p-4">Loading...</div>;
-  if (isError) return <div className="text-center p-4 text-red-500">Error: {error.message}</div>;
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorDisplay message={error.message} retry={() => window.location.reload()} />;
 
   const totalCount = data?.count || 0;
   const totalPages = Math.ceil(totalCount / limit);
