@@ -17,3 +17,8 @@ export const fetchPokemonDetails = async (name) => {
   const response = await axios.get(`${BASE_URL}/pokemon/${name}`);
   return response.data;
 };
+
+export const fetchTypeDetails = async (url) => {
+  const response = await axios.get(url);
+  return response.data;
+};
